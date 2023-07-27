@@ -20,7 +20,7 @@ nn_algo.fit(rating_pivot)
 
 **a. Recommend movies based on a specific movie**
 
-First, we will recommend movies to users based on a specific movie. When we suggest a specific movie, the system will go through the data list and take the movie ID of that specific movie and append to self.hist list.
+First, we will recommend movies to users based on a specific movie. When we suggest a specific movie, the system will go through the movie list and take the movie ID of that specific movie and append to self.hist list.
 
 ```
  def recommend_on_movie(self, movie, n_recommend=5):
@@ -28,7 +28,7 @@ First, we will recommend movies to users based on a specific movie. When we sugg
         movieid = int(movies[movies['title']==movie]['movieId'])
         self.hist.append(movieid)
 ```
-Applying KNN method, the formula is as follows: kneighbors(X, n_neighbors=None, return_distance=True) where X are points/query points, n_neighbors are numbers of neighbors required for the same, return_distance is bool. The function will take the movieid passed through and look for 5 movie ids that are the nearest neighbors to this one.
+Applying KNN method, the formula is as follows: kneighbors(X, n_neighbors=None, return_distance=True) where X are points/query points, n_neighbors are numbers of neighbors required for the same, return_distance is bool. The function will take the movieid passed through and return the 5 (or a user inputed amount of) movie ids that are the nearest neighbors to this one.
 ```
 distance,neighbors=nn_algo.kneighbors([rating_pivot.loc[movieid]],n_neighbors=n_recommend+1)
 ```
@@ -43,9 +43,10 @@ If there is no movie to be passed through, then there will be no history for the
 return print('No history found')
 ```
 
-We create a variable called history. This variable will loop through the list of movie ids in the rating_pivot table in the self.hist list and return an array of movie id. Then, we will apply the KNN method to calculate the weighted average of all the data points in the history array and return 5 recommended movies based on the history. 
+We create a variable called history that contains only the ratings data for the movies in our self.hist list. Then, we will apply the KNN method on the average of all the data points in the history array and return 5 recommended movies based on the history. 
 
-```history = np.array([list(rating_pivot.loc[mid]) for mid in self.hist])
+```
+history = np.array([list(rating_pivot.loc[mid]) for mid in self.hist])
 distance,neighbors =nn_algo.kneighbors([np.average(history, axis=0)],n_neighbors=n_recommend + len(self.hist))
 ```
 
@@ -95,16 +96,17 @@ distance,neighbors=nn_algo.kneighbors([contents.iloc[iloc]],n_neighbors=n_recomm
 ````
 
 **b. Recommend based on history**
-Similarly, create a variable called history. This variable will loop through the list of movie ids in the content dataframe table in the self.hist list and return the movie id array. Then, we will apply the KNN method to calculate the weighted average of all the data points in the history array and return 5 recommended movies based on the history. 
+Similarly, create a variable called history containg only the genre data for the movies in our self.hist list. Then, we will apply the KNN method on the average of all the data points in the history array and return 5 recommended movies based on the history. 
 
 ```
 history = np.array([list(contents.iloc[iloc]) for iloc in self.hist])
+distance,neighbors =nn_algo.kneighbors([np.average(history, axis=0)],n_neighbors=n_recommend + len(self.hist))
 ```
 
 **Oberseve the results**
 
 ```
-print(recommender.recommend_on_movie('Father of the Bride Part II (1995)')
+print(recommender.recommend_on_movie('Father of the Bride Part II (1995)'))
 ```
 
 The results returned: _['Waiting for Guffman (1996)', 'Jimmy Hollywood (1994)', 'Kolya (1996)', 'Life with Mikey (1993)', '8 1/2 Women (1999)']_
