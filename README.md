@@ -1,5 +1,6 @@
 _I would like to give credits of this project to Sachin Sarkar for inspiring the project as well as creating the dataset._
 # MOVIE RECOMMENDATION SYSTEM
+**Goal of the Project:** To recommend suitables movies to customers with collaborative filtering and content-based filtering. The system can increase users satisfaction and help companies to provide/suggest the best products/services to their customers.
 ### INSTALLATION
 Make sure you install these packages:
 1. numpy
@@ -9,8 +10,9 @@ Make sure you install these packages:
 
 ### CODE ANALYSIS
 **1. Collaborative Filtering**
+
+  **Collaborative Filtering** recommends movies to users based on the interests and reactions of other users. It will first search a large group of people and identify users with similar reactions to a particular users. We will do that with the NearestNeighbors from sklearn.neighbors. 
   
-  Collaborative Filtering recommends movies to users based on the interests and reactions of other users. It will first search a large group of people and identify users with similar reactions to a particular users. You will do that with the NearestNeighbors from sklearn.neighbors. Make sure you install the scikit package first.
 NearestNeighbors conducts unsupervised nearest neighbor learning. The metrics to be used in this part will be 'cosine'. This metrics will measure data points with high similarity and use it to determine classification. In this project, cosine metrics will compare users that are the most similar and cluster them into a group.
 ```
 from sklearn.neighbors import NearestNeighbors
@@ -70,7 +72,7 @@ Print the result of recommend_on history again and it should give you a list of 
 
 **2. Recommend based on Content-based Filtering**
 
-Content-based filtering will recommend movies to users based on the movies that the users previously watched and liked, or based on users explicit feedback.
+**Content-based filtering** will recommend movies to users based on the movies that the users previously watched and liked, or based on users explicit feedback.
 
 The first example would be to recommend users movies in genres of those they like to watch before. We will create this system with the CountVectorizer from sklearn.feature_extraction.text. CountVectorizer is used to "transform a given text into a vectorizer on the basis of the frequency of each word that occurs in the entire text"[1]. When counting the frequency of each word, remember to set the stopwords so it won't count any connector word (a, an, the...) It then will transform a collection of text from the genres into a numerical matrix with fit_transform. We will also create a dataframe called Contents. In this data frame, it counts all of the feature names in the data list.
 ```
